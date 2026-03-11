@@ -1,16 +1,17 @@
-node {
-    checkout scm
+pipeline {
+    agent any
 
-    stage("Build") {
-        docker.image('shippingdocker/php-composer:7.4').inside('-u root') {
-            sh 'rm composer.lock'
-            sh 'composer install'
-        }
-    }
-
-    stage("Testing") {
-        docker.image('ubuntu').inside('-u root') {
-            sh 'echo "Ini adalah test"'
+    stages {
+        stage('Deploy') {
+            steps {
+                script {
+                    docker.image('agung3wi/alpine-rsync:1.1').inside {
+                        sshagent(['ssh-pwd']) {
+                            sh 'echo Deploy Success'
+                        }
+                    }
+                }
+            }
         }
     }
 }
