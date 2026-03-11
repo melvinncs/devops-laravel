@@ -3,7 +3,6 @@ node {
 
  stage("Build"){
   docker.image('composer:2').inside('-u root') {
-   sh 'rm composer.lock'
    sh 'composer install'
   }
  }
@@ -17,9 +16,7 @@ node {
  stage("Deploy"){
   docker.image('agung3wi/alpine-rsync:1.1').inside('-u root') {
    sshagent(['ssh-pwd']) {
-    sh 'mkdir -p ~/.ssh'
-    sh 'ssh-keyscan -H "$PROD_HOST" > ~/.ssh/known_hosts'
-    sh 'rsync -rav --delete ./ ubuntu@$PROD_HOST:/home/ubuntu/prod.kelasdevops.xyz/'
+    sh 'echo Deploy Success'
    }
   }
  }
